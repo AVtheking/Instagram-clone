@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/utils.dart/global_variable.dart';
 import 'package:instagram_clone/utils.dart/utilts.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,9 +12,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int pageInd = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: HomePageItems[pageInd],
       bottomNavigationBar: CupertinoTabBar(
           backgroundColor: mobileBackgroundColor,
           currentIndex: pageInd,
@@ -23,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
               pageInd = index;
             });
           },
-          items: [
+          items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: '',
