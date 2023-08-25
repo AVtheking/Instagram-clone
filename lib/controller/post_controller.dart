@@ -50,6 +50,7 @@ class PostController extends StateNotifier<bool> {
           postId: postId,
           description: description,
           uid: user.uid,
+          commentCount: 0,
           username: user.username,
           profileImg: user.profilepic,
           postUrl: postUrl,

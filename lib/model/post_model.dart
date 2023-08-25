@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
 class Post {
@@ -10,6 +8,7 @@ class Post {
   final String username;
   final String profileImg;
   final String postUrl;
+  final int commentCount;
   final DateTime createdAt;
   final List likes;
   Post({
@@ -71,7 +70,6 @@ class Post {
     );
   }
 
-  
   @override
   String toString() {
     return 'Post(postId: $postId, description: $description, uid: $uid, username: $username, profileImg: $profileImg, postUrl: $postUrl, createdAt: $createdAt, likes: $likes)';
