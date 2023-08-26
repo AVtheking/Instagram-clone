@@ -68,6 +68,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
   void addPost(BuildContext context) {
     ref.watch(postControllerProvider.notifier).savePost(
         description: _description.text.trim(), file: file, context: context);
+    file = null;
   }
 
   @override

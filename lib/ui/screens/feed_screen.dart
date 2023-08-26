@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram_clone/controller/auth_controller.dart';
 import 'package:instagram_clone/controller/post_controller.dart';
 import 'package:instagram_clone/error_text.dart';
 import 'package:instagram_clone/ui/widget/post_card.dart';
@@ -11,6 +12,7 @@ class FeedScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider)!;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: mobileBackgroundColor,
@@ -35,7 +37,10 @@ class FeedScreen extends ConsumerWidget {
                 itemCount: data.length,
                 itemBuilder: (ctx, index) {
                   final post = data[index];
-                  return PostCard(post: post);
+                  return PostCard(
+                    post: post,
+                    user: user,
+                  );
                 },
               ),
               error: ((error, stackTrace) => ErrorText(

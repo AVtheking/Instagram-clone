@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:instagram_clone/Provider/storage_provider.dart';
 import 'package:instagram_clone/controller/auth_controller.dart';
+import 'package:instagram_clone/model/comment_model.dart';
 import 'package:instagram_clone/model/post_model.dart';
 import 'package:instagram_clone/repository/post_repository.dart';
 import 'package:instagram_clone/utils.dart/utilts.dart';
@@ -18,6 +19,8 @@ final postControllerProvider = StateNotifierProvider<PostController, bool>(
 );
 final postProvider = StreamProvider(
     (ref) => ref.read(postControllerProvider.notifier).fetchPost());
+final commentProvider = StreamProvider.family((ref, Post post) =>
+    ref.read(postControllerProvider.notifier).fetchComment(post));
 
 class PostController extends StateNotifier<bool> {
   final PostRepository _postRepository;
@@ -67,5 +70,30 @@ class PostController extends StateNotifier<bool> {
 
   Stream<List<Post>> fetchPost() {
     return _postRepository.fetchPost();
+  }
+
+  void updateLikes(Post post) async {
+    final user = _ref.read(userProvider)!;
+    _postRepository.updateLike(post, user.uid);
+  }
+
+  void addComments(Post post, String commentText, BuildContext context) async {
+    final user = _ref.read(userProvider)!;
+    final commentId = const Uuid().v1();
+    CommentModel comment = CommentModel(
+        commentId: commentId,
+        comment: commentText,
+        username: user.username,
+        uid: user.uid,
+        profileUrl: user.profilepic,
+        createdAt: DateTime.now(),
+        likes: []);
+
+    final res = await _postRepository.addComments(comment, post);
+    res.fold((l) => showSnackBar(context, l.toString()), (r) => null);
+  }
+
+  Stream<List<CommentModel>> fetchComment(Post post) {
+    return _postRepository.fetchComment(post);
   }
 }

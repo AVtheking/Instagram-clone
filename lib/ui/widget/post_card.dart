@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:instagram_clone/controller/post_controller.dart';
 import 'package:instagram_clone/model/post_model.dart';
+import 'package:instagram_clone/model/user_model.dart';
+import 'package:instagram_clone/ui/screens/comment_screen.dart';
 import 'package:instagram_clone/utils.dart/utilts.dart';
 import 'package:intl/intl.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends ConsumerWidget {
   final Post post;
+  final UserModel user;
   const PostCard({
     super.key,
+    required this.user,
     required this.post,
   });
   showDialogOption(BuildContext context) {
@@ -28,8 +34,20 @@ class PostCard extends StatelessWidget {
     );
   }
 
+  void navigateToCommentScreen(BuildContext context, Post post) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CommentScreen(post: post),
+      ),
+    );
+  }
+
+  void updateLikes(Post post, WidgetRef ref) {
+    ref.read(postControllerProvider.notifier).updateLikes(post);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Column(
@@ -59,30 +77,39 @@ class PostCard extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            child: SizedBox(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.35,
-              child: Image.network(
-                post.postUrl,
-                fit: BoxFit.cover,
+            child: GestureDetector(
+              onDoubleTap: () => updateLikes(post, ref),
+              child: SizedBox(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.35,
+                child: Image.network(
+                  post.postUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
           Row(
             children: [
               IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.favorite,
-                  color: Colors.red,
-                ),
+                onPressed: () {
+                  updateLikes(post, ref);
+                },
+                icon: post.likes.contains(user.uid)
+                    ? const Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      )
+                    : const Icon(Icons.favorite_border),
               ),
               // const SizedBox(
               //   width: 5,
               // ),
               IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.message),
+                onPressed: () {
+                  navigateToCommentScreen(context, post);
+                },
+                icon: const Icon(Icons.comment_outlined),
               ),
               IconButton(
                 onPressed: () {},

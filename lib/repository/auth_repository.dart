@@ -31,4 +31,27 @@ class AuthRepository {
     return _firestore.collection('users').doc(uid).snapshots().map(
         (event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
   }
+
+  Stream<List<UserModel>> getUseOnSearch(String query) {
+    return _firestore
+        .collection('users')
+        .where(
+          'username',
+          isGreaterThanOrEqualTo: query.isEmpty ? 0 : query,
+          isLessThan: query.isEmpty
+              ? null
+              : query.substring(0, query.length - 1) +
+                  String.fromCharCode(query.codeUnitAt(query.length - 1) + 1),
+        )
+        .snapshots()
+        .map((event) {
+      List<UserModel> users = [];
+      for (var user in event.docs) {
+        users.add(
+          UserModel.fromMap(user.data()),
+        );
+      }
+      return users;
+    });
+  }
 }

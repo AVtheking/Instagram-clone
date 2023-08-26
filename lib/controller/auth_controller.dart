@@ -16,6 +16,7 @@ final userDataProvider = StreamProvider.family((ref, String uid) =>
 
 final stateChangeProvider = StreamProvider(
     (ref) => ref.read(authControllerProvider.notifier).authStateChange);
+
 final authControllerProvider = StateNotifierProvider<AuthController, bool>(
   (ref) => AuthController(
     authRepository: ref.read(authRepositoryProvider),
@@ -24,6 +25,8 @@ final authControllerProvider = StateNotifierProvider<AuthController, bool>(
     storageRepository: ref.read(storageProvider),
   ),
 );
+final userOnSearchProvider = StreamProvider.family((ref, String query) =>
+    ref.read(authControllerProvider.notifier).getUseOnSearch(query));
 
 class AuthController extends StateNotifier<bool> {
   final AuthRepository _authRepository;
@@ -117,5 +120,9 @@ class AuthController extends StateNotifier<bool> {
       state = false;
       showSnackBar(context, e.toString());
     }
+  }
+
+  Stream<List<UserModel>> getUseOnSearch(String query) {
+    return _authRepository.getUseOnSearch(query);
   }
 }

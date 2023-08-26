@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 class Post {
@@ -18,6 +20,7 @@ class Post {
     required this.username,
     required this.profileImg,
     required this.postUrl,
+    required this.commentCount,
     required this.createdAt,
     required this.likes,
   });
@@ -29,6 +32,7 @@ class Post {
     String? username,
     String? profileImg,
     String? postUrl,
+    int? commentCount,
     DateTime? createdAt,
     List? likes,
   }) {
@@ -39,6 +43,7 @@ class Post {
       username: username ?? this.username,
       profileImg: profileImg ?? this.profileImg,
       postUrl: postUrl ?? this.postUrl,
+      commentCount: commentCount ?? this.commentCount,
       createdAt: createdAt ?? this.createdAt,
       likes: likes ?? this.likes,
     );
@@ -52,6 +57,7 @@ class Post {
       'username': username,
       'profileImg': profileImg,
       'postUrl': postUrl,
+      'commentCount': commentCount,
       'createdAt': createdAt.millisecondsSinceEpoch,
       'likes': likes,
     };
@@ -65,6 +71,7 @@ class Post {
       username: map['username'] as String,
       profileImg: map['profileImg'] as String,
       postUrl: map['postUrl'] as String,
+      commentCount: map['commentCount'] as int,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       likes: List.from((map['likes'] as List)),
     );
@@ -72,7 +79,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(postId: $postId, description: $description, uid: $uid, username: $username, profileImg: $profileImg, postUrl: $postUrl, createdAt: $createdAt, likes: $likes)';
+    return 'Post(postId: $postId, description: $description, uid: $uid, username: $username, profileImg: $profileImg, postUrl: $postUrl, commentCount: $commentCount, createdAt: $createdAt, likes: $likes)';
   }
 
   @override
@@ -85,6 +92,7 @@ class Post {
         other.username == username &&
         other.profileImg == profileImg &&
         other.postUrl == postUrl &&
+        other.commentCount == commentCount &&
         other.createdAt == createdAt &&
         listEquals(other.likes, likes);
   }
@@ -97,7 +105,13 @@ class Post {
         username.hashCode ^
         profileImg.hashCode ^
         postUrl.hashCode ^
+        commentCount.hashCode ^
         createdAt.hashCode ^
         likes.hashCode;
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory Post.fromJson(String source) =>
+      Post.fromMap(json.decode(source) as Map<String, dynamic>);
 }
