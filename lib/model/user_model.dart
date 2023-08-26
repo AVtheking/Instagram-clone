@@ -8,6 +8,7 @@ class UserModel {
   final String username;
   final String profilepic;
   final String email;
+  final int posts;
   final String bio;
   final List followers;
   final List following;
@@ -16,6 +17,7 @@ class UserModel {
     required this.username,
     required this.profilepic,
     required this.email,
+    required this.posts,
     required this.bio,
     required this.followers,
     required this.following,
@@ -26,6 +28,7 @@ class UserModel {
     String? username,
     String? profilepic,
     String? email,
+    int? posts,
     String? bio,
     List? followers,
     List? following,
@@ -35,6 +38,7 @@ class UserModel {
       username: username ?? this.username,
       profilepic: profilepic ?? this.profilepic,
       email: email ?? this.email,
+      posts: posts ?? this.posts,
       bio: bio ?? this.bio,
       followers: followers ?? this.followers,
       following: following ?? this.following,
@@ -47,6 +51,7 @@ class UserModel {
       'username': username,
       'profilepic': profilepic,
       'email': email,
+      'posts': posts,
       'bio': bio,
       'followers': followers,
       'following': following,
@@ -59,6 +64,7 @@ class UserModel {
       username: map['username'] as String,
       profilepic: map['profilepic'] as String,
       email: map['email'] as String,
+      posts: map['posts'] as int,
       bio: map['bio'] as String,
       followers: List.from((map['followers'] as List)),
       following: List.from((map['following'] as List)),
@@ -67,7 +73,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, username: $username, profilepic: $profilepic, email: $email, bio: $bio, followers: $followers, following: $following)';
+    return 'UserModel(uid: $uid, username: $username, profilepic: $profilepic, email: $email, posts: $posts, bio: $bio, followers: $followers, following: $following)';
   }
 
   @override
@@ -78,6 +84,7 @@ class UserModel {
         other.username == username &&
         other.profilepic == profilepic &&
         other.email == email &&
+        other.posts == posts &&
         other.bio == bio &&
         listEquals(other.followers, followers) &&
         listEquals(other.following, following);
@@ -89,6 +96,7 @@ class UserModel {
         username.hashCode ^
         profilepic.hashCode ^
         email.hashCode ^
+        posts.hashCode ^
         bio.hashCode ^
         followers.hashCode ^
         following.hashCode;

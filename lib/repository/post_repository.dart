@@ -17,10 +17,11 @@ class PostRepository {
 
   FutureVoid savePost(Post post) async {
     try {
+      await _firestore.collection('posts').doc(post.postId).set(post.toMap());
       return right(await _firestore
-          .collection('posts')
-          .doc(post.postId)
-          .set(post.toMap()));
+          .collection('users')
+          .doc(post.uid)
+          .update({'posts': FieldValue.increment(1)}));
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -98,6 +99,20 @@ class PostRepository {
         );
       }
       return comments;
+    });
+  }
+
+  Stream<List<Post>> getUserPosts(String userId) {
+    return _firestore
+        .collection('posts')
+        .where('uid', isEqualTo: userId)
+        .snapshots()
+        .map((event) {
+      List<Post> posts = [];
+      for (var post in event.docs) {
+        posts.add(Post.fromMap(post.data() as Map<String, dynamic>));
+      }
+      return posts;
     });
   }
 }

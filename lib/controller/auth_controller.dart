@@ -78,6 +78,7 @@ class AuthController extends StateNotifier<bool> {
         );
 
         UserModel user = UserModel(
+          posts: 0,
           uid: cred.user!.uid,
           username: username,
           email: email,

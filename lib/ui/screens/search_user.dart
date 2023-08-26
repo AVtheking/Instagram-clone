@@ -16,7 +16,7 @@ class _SearchUserState extends ConsumerState<SearchUser> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider)!;
+    // final user = ref.watch(userProvider)!;
     return Scaffold(
       appBar: AppBar(
           backgroundColor: mobileBackgroundColor,

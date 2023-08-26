@@ -21,6 +21,8 @@ final postProvider = StreamProvider(
     (ref) => ref.read(postControllerProvider.notifier).fetchPost());
 final commentProvider = StreamProvider.family((ref, Post post) =>
     ref.read(postControllerProvider.notifier).fetchComment(post));
+final userPostProvider = StreamProvider.family((ref, String userId) =>
+    ref.read(postControllerProvider.notifier).getUserPosts(userId));
 
 class PostController extends StateNotifier<bool> {
   final PostRepository _postRepository;
@@ -95,5 +97,9 @@ class PostController extends StateNotifier<bool> {
 
   Stream<List<CommentModel>> fetchComment(Post post) {
     return _postRepository.fetchComment(post);
+  }
+
+  Stream<List<Post>> getUserPosts(String userId) {
+    return _postRepository.getUserPosts(userId);
   }
 }
