@@ -126,4 +126,13 @@ class AuthController extends StateNotifier<bool> {
   Stream<List<UserModel>> getUseOnSearch(String query) {
     return _authRepository.getUseOnSearch(query);
   }
+
+  void signOut() async {
+    _auth.signOut();
+  }
+
+  void addFollowers(UserModel selectedUser) async {
+    final user = _ref.read(userProvider)!;
+    _authRepository.addFollowers(selectedUser, user);
+  }
 }

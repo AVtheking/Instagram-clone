@@ -24,7 +24,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             child: GestureDetector(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const SearchUser(),
+                  builder: (context) => SearchUser(),
                 ));
               },
               child: SizedBox(

@@ -54,4 +54,22 @@ class AuthRepository {
       return users;
     });
   }
+
+  void addFollowers(UserModel selectedUUser, UserModel currentUser) async {
+    if (selectedUUser.followers.contains(currentUser.uid)) {
+      await _firestore.collection('users').doc(selectedUUser.uid).update({
+        'followers': FieldValue.arrayRemove([currentUser.uid]),
+      });
+      await _firestore.collection('users').doc(currentUser.uid).update({
+        'following': FieldValue.arrayRemove([currentUser.uid]),
+      });
+    } else {
+      await _firestore.collection('users').doc(selectedUUser.uid).update({
+        'followers': FieldValue.arrayUnion([currentUser.uid]),
+      });
+      await _firestore.collection('users').doc(currentUser.uid).update({
+        'following': FieldValue.arrayUnion([selectedUUser.uid]),
+      });
+    }
+  }
 }
